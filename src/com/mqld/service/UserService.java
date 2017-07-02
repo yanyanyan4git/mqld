@@ -11,4 +11,5 @@ public interface UserService {
 	User getUser(String id);
 	boolean updateTeacher(User user);
 	boolean manageUser(String ID,String name,String authority);
+	boolean delUser(String iD);
 }

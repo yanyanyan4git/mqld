@@ -1,7 +1,10 @@
 
-		var studengQueueVm = new Vue({
+
+		var teacherQueueVm = new Vue({
 			el : '#queue',
 			data : {
+				action:'排队处理',
+				actions:['排队处理','工作时间'],
 				queueID:'',
 				studentName:'',
 				currentQueueNum:'',
@@ -24,14 +27,12 @@
 			computed: {
 				user: function () {
 					if (paginVm.recordIndex==null) {
-						return {
-							studentName:'',
-							queueID:''
-						};
+						return null;
 					}else {
 						var item=paginVm.records[paginVm.recordIndex];
 						this.studentName=item.studentName;
-						this.queueID=item.queueID;
+						console.log(item.ID);
+						this.queueID=item.ID;
 						return item;
 					}
 				  },
@@ -41,13 +42,20 @@
 				
 			},
 			mounted:function(){
+				initTimePeriod($('#startTime'),$('#endTime'));
 				paginVm.preUrl ="getQueuedStudent.action?";
 				paginVm.go(1);
 			},
 			methods : {
 				setWorkTime:function(){
 					var self = this;
-					var src = "setWorkTime.action?startWorkTime="+this.startWorkTime+"&endWorkTime="+this.endWorkTime;
+					var startTime=$('#startTime').val();
+					var endTime=$('#endTime').val();
+					if (startTime==''||endTime=='') {
+						alert("上班或下班时间未填写");
+						return;
+					}
+					var src = "setWorkTime.action?startWorkTime="+startTime+"&endWorkTime="+endTime;
 					$.ajax({
 						url :src,
 						method : 'GET',
@@ -56,6 +64,7 @@
 							if (result.error) {
 								alert("修改工作时间失败");
 							}else {
+								bgWorkVm.setUserStatus();
 								alert("修改工作时间成功");
 							}
 						} 
@@ -63,7 +72,7 @@
 				},
 				resolveQueue: function() {
 					var self = this;
-					var src = "resolveQueue.action?path="+this.path+"&comment="+this.comment;
+					var src = "resolveQueue.action?path="+this.path+"&comment="+this.comment+"&queueID="+this.queueID;
 					$.ajax({
 						url :src,
 						method : 'GET',
@@ -74,7 +83,7 @@
 								self.result=self.studentName+"解决失败";
 								self.success=false;
 							}else {
-								self.result=self.studentNam+"解决成功";
+								self.result=self.studentName+"解决成功";
 								self.success=true;
 							}
 						} 
@@ -82,3 +91,7 @@
 				}
 			}
 		});
+		
+		
+		
+		

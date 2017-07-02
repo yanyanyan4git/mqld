@@ -1,5 +1,10 @@
 package com.mqld.service.impl;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -79,15 +84,30 @@ public class UserServiceImpl implements UserService {
 		}
 		String endWorkTime=user.getEndWorkTime();
 		String startWorkTime=user.getStartWorkTime();
-		int maxStudentNum=calculateTime(startWorkTime,endWorkTime);
+		int maxStudentNum;
+		try {
+			maxStudentNum = calculateTime(startWorkTime,endWorkTime);
+		} catch (ParseException e) {
+			return false;
+		}
 		user.setMaxStudentNum(maxStudentNum);
 		
 		return userDao.updateTeacher(user);
 	}
 
-	private int calculateTime(String startWorkTime, String endWorkTime) {
-		// TODO Auto-generated method stub
-		return 0;
+	private int calculateTime(String startWorkTime, String endWorkTime) throws ParseException {
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+	    Date d1 = df.parse("2004-01-02 "+endWorkTime);
+	    Date d2 = df.parse("2004-01-02 "+startWorkTime);
+	    long diff = d1.getTime() - d2.getTime();
+	    int minutes = (int)diff / (1000 * 60  );
+		return minutes/Constant.MIN_PER_STU;
+	}
+
+	@Override
+	public boolean delUser(String iD) {
+		
+		return userDao.deleteUser(iD);
 	}
 	
 }

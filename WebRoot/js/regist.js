@@ -5,7 +5,15 @@ var registVm = new Vue({
 	el : '#registPage',
 	data : {
 		style:'---请选择助教风格---',
-		styles : ['风格1','风格2','风格3'],
+		styles : ['日系设计',
+			'韩式写实设计',
+			'Q版设计',
+			'机甲设计',
+			'欧美设计',
+			'插图',
+			'结构',
+			'色彩',
+			'怪物'],
 		types:['学生','助教'],
 		type:'学生',
 		ID:'',
@@ -26,7 +34,14 @@ var registVm = new Vue({
 			    'field':FormField,
 			    'feedback':Feedback
 		  },
-	mounted : function() {
+	computed : {
+		IDHelpler: function () {
+			if (this.type=='学生') {
+				return 's+6位数字';
+			}else {
+				return 't+6位数字';
+			}
+		}
 	},
 	methods : {
 		toggleStyle:function(style){
@@ -34,6 +49,9 @@ var registVm = new Vue({
 		},
 		toggleTab:function(type){
 			this.type=type;
+			this.fixID=false;
+			this.fixPw=false;
+			this.clearField();
 			this.clearResult();
 			this.clearError();
 		},

@@ -11,6 +11,7 @@
 <script type="text/javascript" src="js/vue.js"></script>
 <script type="text/javascript" src="js/jquery.raty.js"></script>  
 <script type="text/javascript" src="js/bootstrap-datetimepicker.js"></script>  
+<script type="text/javascript" src="js/datetimepicker.js"></script>
 
 <link rel="stylesheet" href="css/font-awesome.css">
 <link rel="stylesheet" href="css/bootstrap.css">
@@ -18,110 +19,109 @@
 <link rel="stylesheet" href="css/pagination.css"  />
 <link rel="stylesheet" href="css/teacher-side-queue.css">
 <link rel="stylesheet" href="css/bootstrap-datetimepicker.css">
+<style type="text/css">
+
+</style>
 </head>
 <body>
-	<div class="common-div" id="queue">
+	<div class="common-div" >
 		<div>
-			<div class="page-header">
+			<div class="page-header" id="beginWork">
 				<h1>
 					排队系统（助教端）<small>曼奇立德</small> 
-					<button class="btn btn-primary right"  type="button" @click="showWorkTime=true">设置上班时间</button>
+					<button class="btn btn-primary right"  type="button" @click="toggleWork">{{workBtn}}</button> 
 				</h1>
 			</div>
 		</div>
 		<div>
-		<div style="display: inline;"  v-if="showWorkTime">
-		<div class="input-group work-time-bar" id="datepicker" >  
-            	 <span class="input-group-addon">上班时间</span>  <input type="text" class="form-control" name="start" id="startTime" readonly="" v-model="startWorkTime"/>  
-            <span class="input-group-addon">至</span>  
-            <input type="text" class="form-control" name="end" id="endTime" readonly="" v-model="endWorkTime"/>  
-           <span class="input-group-btn">
-        <button class="btn btn-default"  type="button" id="workTimeConfirm" @click="setWorkTime">确定</button>
-      </span>
-        </div>  
+		<div style="display: inline;" >
+		
         </div>
-		<div class="left-div"  id="pagination">
+		<div class="left-div"  id="pagination" v-cloak>
 		
 			<table class="table table-hover">
 				<thead>
 					<tr>
 						<th>排队编号</th>
 						<th>学生姓名</th>
-						<th>助教风格</th>
 						<th>改图数量</th>
 						<th>文件路径</th>
+						<th>备注</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr v-for="(item,index) in records" @click="recordIndex=index">
-						<th scope="row">{{index+currenPage*pageSize}}</th>
+					<tr v-for="(item,index) in records" :class="index==recordIndex?'info':''" @click="recordIndex=index">
+						<th scope="row">{{index+1+(currentPage-1)*pageSize}}</th>
 						<td>{{item.studentName}}</td>
-						<td>{{item.teacherStyle}}</td>
 						<td>{{item.pictureNum}}</td>
 						<td>{{item.studentPath}}</td>
+						<td>{{item.studentComment}}</td>
 					</tr>
 
 				</tbody>
 			</table>
 			<paginbar :data="$data"  v-on:pagin="go"  v-on:inputgo="inputGo"></paginbar>
+			
 		</div>
-		<div class="right-div">
+		<div class="right-div" id="queue" v-cloak>
 				<div >
 					<h3>
 						信息
 					</h3>
 				</div>
 				<div>
+				<ul class="nav nav-pills">
+			<li v-for="actionItem in actions" role="presentation"
+				:class="{'active':actionItem==action}" @click="action=actionItem"><a>{{actionItem}}</a></li>
+
+		</ul></div>
+				<div v-show="action=='排队处理'">
 				<form>
-					<field  :error="error" labelname="文件路径">
+					<field   labelname="排队编号">
+						<span class="right">{{queueID}}</span>
+					</field>
+					<field   labelname="学生姓名">
+						 <span class="right">{{studentName}}</span>
+					</field>
+					<field   labelname="文件路径">
 					 <input class="form-control"  v-model="path"
 							placeholder="文件路径">
 					</field>
-					<field  :error="error" labelname="备注">
+					<field  labelname="备注">
 						 <textarea class="form-control" v-model="comment"></textarea>
 					</field>
 					<feedback :success="success" :result="result"></feedback>
-					<button type="button" class="btn btn-primary form-btn" :disabled="nullField"
+					<button type="button" class="btn btn-primary form-btn" :disabled="nullField||user==null"
 						@click="resolveQueue">解决</button>
 
 				</form>
+				<div class="hidden">{{user}}</div>
 				</div>
-			</div></div>
+				<div v-show="action=='工作时间'">
+					<form>
+						 <field   labelname="上班时间">
+						<input type="text" class="form-control short-input right" name="start" id="startTime" readonly="" v-model="startWorkTime"/> 
+						</field>
+						
+						<field   labelname="下班时间">
+							   <input type="text" class="form-control short-input right" name="end" id="endTime" readonly="" v-model="endWorkTime"/> 
+						</field> 
+						<feedback :success="success" :result="result"></feedback>
+						<button type="button" class="btn btn-primary form-btn" @click="setWorkTime" 
+					>设置</button>
+					</form>
+				</div>
+			</div ></div>
 		
 	</div>
 </body>
 <script type="text/javascript" src=js/common-components.js></script>
 <script type="text/javascript" src="js/pagination.js"></script>
+<script type="text/javascript" src="js/bg-work.js"></script>
 <script type="text/javascript" src="js/teacher-side-queue.js"></script>
 <script type="text/javascript">
-		$('#startTime').datetimepicker({
-	        todayBtn:  1,
-			autoclose: 1,
-			todayHighlight: 1,
-			startView: 1,
-			minView: 0,
-			maxView: 1,
-			format:'hh:ii',
-			 endDate : new Date()  
-	    }).on('changeDate',function(e){
-	    	var startTime = e.date;  
-	    	$('#endTime').datetimepicker('setStartDate',startTime);  
-	    	$('#startTime').datetimepicker('hide');
-	    });
-		$('#endTime').datetimepicker({
-	        todayBtn:  1,
-			autoclose: 1,
-			todayHighlight: 1,
-			startView: 1,
-			minView: 0,
-			maxView: 1,
-			format:'hh:ii',
-			 endDate : new Date()  
-	    }).on('changeDate',function(e){
-	    	var endTime = e.date;  
-	    	$('#startTime').datetimepicker('setEndDate',endTime);  
-	    	$('#endTime').datetimepicker('hide');
-	    });
-		
-	</script>
+
+
+</script>
+	
 </html>

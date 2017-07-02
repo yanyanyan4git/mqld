@@ -11,6 +11,7 @@ public class User {
 	private String startWorkTime;
 	private String endWorkTime;
 	private int maxStudentNum;
+	private boolean onWork;
 	public String getID() {
 		return ID;
 	}
@@ -71,4 +72,11 @@ public class User {
 	public void setMaxStudentNum(int maxStudentNum) {
 		this.maxStudentNum = maxStudentNum;
 	}
+	public boolean isOnWork() {
+		return onWork;
+	}
+	public void setOnWork(boolean onWork) {
+		this.onWork = onWork;
+	}
+	
 }

@@ -31,12 +31,7 @@ public class TeacherSideQueueController {
 	
 	@FireAuthority(authorityTypes=AuthorityType.TEACHER)
 	@RequestMapping("/teacherSideQueue")				
-	public String login(HttpServletRequest request){
-//		User user=(User)request.getSession().getAttribute("user");
-//		String teacherID=user.getID();
-//		Page<QueueItem>  page=new Page<QueueItem>(1, 10);
-//		page=queueService.getStudentStatus(teacherID, page);
-//		request.setAttribute("page", page);
+	public String teacherSideQueue(HttpServletRequest request){
 		return "teacher_side_queue";				
 	}
 	
@@ -45,9 +40,9 @@ public class TeacherSideQueueController {
 	public void resolveQueue(HttpServletRequest request,HttpServletResponse response,HttpSession session){
 		String path=request.getParameter("path");
 		String comment=request.getParameter("comment");
-		User user =(User) session.getAttribute("user");
+		String queueID=request.getParameter("queueID");
 		QueueItem queueItem=new QueueItem();
-		queueItem.setTeacherID(user.getID());
+		queueItem.setID(Integer.parseInt(queueID));
 		queueItem.setStudentPath(path);
 		queueItem.setStudentComment(comment);
 		boolean flag=queueService.resolveQueue(queueItem);
@@ -65,7 +60,7 @@ public class TeacherSideQueueController {
 	public void getQueuedStudent(HttpServletRequest request,HttpServletResponse response,@RequestParam("currentPage")String currentPage,@RequestParam("pageSize")String pageSize,HttpSession session){
 		int currentPageNum =Integer.parseInt(currentPage);
 		int pageSizeNum=Integer.parseInt(pageSize);
-		User user =(User) session.getAttribute("user");
+		User user =(User)session.getAttribute("user");
 		Page<QueueItem> page=new Page<QueueItem>(currentPageNum, pageSizeNum);
 		page=queueService.getStudentStatus(user.getID(), page);
 		if (null==page) {
@@ -84,6 +79,22 @@ public class TeacherSideQueueController {
 		User user =(User) session.getAttribute("user");
 		user.setEndWorkTime(endWorkTime);
 		user.setStartWorkTime(startWorkTime);
+		boolean flag=userService.updateTeacher(user);
+		if (flag) {
+			Map<String, Object> data=new TreeMap<String, Object>();
+			data.put("success", true);
+			JsonUtil.flushData(response, data);
+		}else {
+			JsonUtil.flushError(response, "无效的参数");
+		}
+		
+	}
+	
+	@FireAuthority(authorityTypes=AuthorityType.TEACHER, resultType=ResultType.json)
+	@RequestMapping("/setOnWork")				
+	public void setOnWork(HttpServletRequest request,HttpServletResponse response,@RequestParam("onWork")boolean onWork,HttpSession session){
+		User user =(User) session.getAttribute("user");
+		user.setOnWork(onWork);
 		boolean flag=userService.updateTeacher(user);
 		if (flag) {
 			Map<String, Object> data=new TreeMap<String, Object>();

@@ -46,7 +46,7 @@
 					<field  :error="IDError" labelname="ID">
 						<div class="input-group">
 							<input type="text" name="userID" v-model="ID"
-								class="form-control" placeholder="s/t******" :readonly="fixID">
+								class="form-control" :placeholder="IDHelpler" :readonly="fixID">
 							<span class="input-group-btn">
 								<button class="btn btn-primary" type="button"
 									@click="autoIncre()">ID自增</button>
@@ -69,7 +69,7 @@
 						</div>
 					</field>
 					
-					<field  v-if="type=='助教'" :error="styleError" labelname="风格">
+					<field  v-show="type=='助教'" :error="styleError" labelname="风格">
 						<selector :selected="style">
 							<li v-for="style in styles" @click="toggleStyle(style)"><a>{{style}}</a></li>
 						</selector>

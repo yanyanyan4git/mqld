@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -23,14 +24,14 @@ public class UserDaoImpl implements UserDao {
 	private static final String ADD_USER ="INSERT INTO user(ID,name,gender,password,authority) VALUES(?,?,?,?,?)";
 	private static final String ADD_TEACHER ="INSERT INTO teacher(userID,contactInfo,style,startWorkTime,endWorkTime,maxStudentNum) VALUES(?,?,?,?,?,?)";
 	private static final String MANAGE_USER ="UPDATE user SET name=?,authority=? WHERE ID=?";
-	private static final String UPDATE_TEACHER="UPDATE teacher SET contactInfo=?,style=?,startWorkTime=?,endWorkTime=?,maxStudentNum=? WHERE userID=?";
+	private static final String UPDATE_TEACHER="UPDATE teacher SET contactInfo=?,style=?,startWorkTime=?,endWorkTime=?,maxStudentNum=? ,onWork=? WHERE userID=?";
 	private static final String DELETE_USER ="DELETE FROM user WHERE ID=?";
-	private static final String GET_USER ="SELECT u.name,u.gender,u.authority,t.style,t.contactInfo,t.startWorkTime,t.endWorkTime FROM user u LEFT JOIN teacher t ON u.ID=t.userID WHERE u.ID=?";
-	private static final String LOGIN_USER =GET_USER+"AND u.password=?";
+	private static final String GET_USER ="SELECT u.ID,u.name,u.gender,u.authority,t.style,t.contactInfo,t.startWorkTime,t.endWorkTime,IFNULL(t.onWork,false) AS onWork FROM user u LEFT JOIN teacher t ON u.ID=t.userID WHERE u.ID=?";
+	private static final String LOGIN_USER ="SELECT u.ID,u.name,u.gender,u.authority,t.style,t.contactInfo,t.startWorkTime,t.endWorkTime,IFNULL(t.onWork,false) AS onWork FROM user u LEFT JOIN teacher t ON u.ID=t.userID WHERE u.ID=? AND u.password=?";
 	private static final String GET_USERS="SELECT ID,name,gender,authority FROM user ORDER BY ID LIMIT ?,?";
 	private static final String GET_USERS_BY_AUTHORITY="SELECT u.name,u.gender,u.authority,t.style,t.contactInfo,t.startWorkTime,t.endWorkTime FROM user u LEFT JOIN teacher t ON u.ID=t.userID WHERE u.authority=? ORDER BY ID LIMIT ?,?";
-	private static final String GET_USER_COUNT_BY_AUTHORITY="SELECT COUNT(*) FROM user WHERE authority=?";
-	private static final String GET_USER_COUNT="SELECT COUNT(*) FROM user ";
+	private static final String GET_USER_COUNT_BY_AUTHORITY="SELECT IFNULL(COUNT(*),0) FROM user WHERE authority=?";
+	private static final String GET_USER_COUNT="SELECT IFNULL(COUNT(*),0) FROM user ";
 	private static final Logger logger=Logger.getLogger(UserDaoImpl.class);
 	@Override
 	public boolean addUser(User user) {
@@ -59,7 +60,7 @@ public class UserDaoImpl implements UserDao {
 	@Override
 	public boolean updateTeacher(User user) {
 		logger.debug("Begin to UPDATE_TEACHER");
-		int	count=JdbcTemplate.update(UPDATE_TEACHER,user.getContactInfo(),user.getStyle(),user.getStartWorkTime(),user.getEndWorkTime(),user.getMaxStudentNum(),user.getID());
+		int	count=JdbcTemplate.update(UPDATE_TEACHER,user.getContactInfo(),user.getStyle(),user.getStartWorkTime(),user.getEndWorkTime(),user.getMaxStudentNum(),user.isOnWork(),user.getID());
 		logger.debug("complete to UPDATE_TEACHER..."+count);
 		return count>0;
 	}
@@ -91,11 +92,13 @@ public class UserDaoImpl implements UserDao {
 		RowMapper<User> rowMapper=new BeanPropertyRowMapper<User>(User.class);
 		logger.debug("Begin to LOGIN_USER");
 		User user;
-		try {
-			user = JdbcTemplate.queryForObject(LOGIN_USER, rowMapper, id,password);
-		} catch (EmptyResultDataAccessException e) {
-			return null;
-		}
+		
+			try {
+				user = JdbcTemplate.queryForObject(LOGIN_USER, rowMapper, id,password);
+			} catch (DataAccessException e) {
+				user=null;
+			}
+		
 		logger.debug("complete to LOGIN_USER...");
 		return user;
 	}

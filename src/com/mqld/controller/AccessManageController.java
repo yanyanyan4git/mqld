@@ -29,8 +29,6 @@ public class AccessManageController {
 	@FireAuthority(authorityTypes=AuthorityType.ADMIN)
 	@RequestMapping("/accessManage")				
 	public String login( HttpServletRequest request){
-		
-		
 		return "access_manage";				
 	}
 	@FireAuthority(authorityTypes=AuthorityType.ADMIN, resultType=ResultType.json)
@@ -57,6 +55,22 @@ public class AccessManageController {
 		logger.debug(">>doMangement");
 		
 		boolean flag=userService.manageUser(ID, name, authority);
+		if (flag) {
+			Map<String, Object> data=new TreeMap<String, Object>();
+			data.put("result", flag);
+			JsonUtil.flushData(response, data);
+		}else {
+			JsonUtil.flushError(response, "false");
+		}
+		
+	}
+	
+	@FireAuthority(authorityTypes=AuthorityType.ADMIN, resultType=ResultType.json)
+	@RequestMapping("/delUser")				
+	public void delUser( HttpServletRequest request ,@RequestParam("ID")String ID,HttpServletResponse response){
+		logger.debug(">>doMangement");
+		
+		boolean flag=userService.delUser(ID);
 		if (flag) {
 			Map<String, Object> data=new TreeMap<String, Object>();
 			data.put("result", flag);

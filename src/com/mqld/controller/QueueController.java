@@ -50,16 +50,25 @@ public class QueueController {
 	
 	@FireAuthority(authorityTypes=AuthorityType.STUDENT, resultType=ResultType.json)
 	@RequestMapping("/doQueue")				
-	public void doQueue(HttpServletRequest request,HttpServletResponse response){
+	public void doQueue(HttpServletRequest request,HttpServletResponse response,HttpSession session){
+		
+		User user=(User) session.getAttribute("user");
 		int picNum=Integer.parseInt(request.getParameter("picNum"));
 		String path=request.getParameter("path");
 		String comment=request.getParameter("comment");
+		String teacherID=request.getParameter("teacherID");
+		boolean flag=queueService.canQueue(teacherID);
+		if (!flag) {
+			JsonUtil.flushError(response, "助教不在工作时间或已排满");
+			return;
+		}
 		QueueItem queueItem=new QueueItem();
-		
+		queueItem.setStudentID(user.getID());
+		queueItem.setTeacherID(teacherID);
 		queueItem.setPictureNum(picNum);
 		queueItem.setStudentPath(path);
 		queueItem.setStudentComment(comment);
-		boolean flag=queueService.queue(queueItem);
+		flag=queueService.queue(queueItem);
 		if (flag) {
 			Map<String, Object> data=new TreeMap<String, Object>();
 			data.put("success", true);
@@ -89,13 +98,24 @@ public class QueueController {
 	public void isQueued(HttpServletRequest request,HttpServletResponse response,HttpSession session){
 		User user =(User) session.getAttribute("user");
 		boolean flag= queueService.isQueued(user.getID());
-		if (flag) {
-			Map<String, Object> data=new TreeMap<String, Object>();
-			data.put("success", true);
-			JsonUtil.flushData(response, data);
-		}else {
-			JsonUtil.flushError(response, "取消失败");
-		}
-		
+		Map<String, Object> data=new TreeMap<String, Object>();
+		data.put("isQueued", flag);
+		JsonUtil.flushData(response, data);
 	}
+	
+	@FireAuthority(authorityTypes=AuthorityType.STUDENT, resultType=ResultType.json)
+	@RequestMapping("/getCurrentInfo")				
+	public void getCurrentInfo(HttpServletRequest request,HttpServletResponse response,HttpSession session){
+		User user =(User) session.getAttribute("user");
+		QueueItem qItem=queueService.getStuCurrStatus(user.getID());
+		if (null==qItem) {
+			JsonUtil.flushError(response, "服务器出错");
+		}else {
+			Map<String, Object> data=new TreeMap<String, Object>();
+			data.put("queue", qItem);
+			JsonUtil.flushData(response, data);
+		}
+	}
+	
+	
 }

@@ -1,5 +1,5 @@
 
-var registVm = new Vue({
+var mainVm = new Vue({
 	el : '#main',
 	data : {
 		user:{
@@ -8,7 +8,9 @@ var registVm = new Vue({
 			remember:false
 		},
 		success:false,
-		name:''
+		name:'',
+		ssUser:'',
+		refreshed:false
 	},
 	computed:{
 		logNull:function(){
@@ -16,6 +18,9 @@ var registVm = new Vue({
 			return user.username==''||user.password=='';
 		},
 		
+	},
+	mounted:function(){
+		this.getUser();
 	},
 	methods : {
 		show4Athor:function(activePage){
@@ -29,6 +34,30 @@ var registVm = new Vue({
 				}
 			}
 			return false;
+		},
+		getUser:function(){
+			var self = this;
+			var src = "getUser.action";
+			this.refreshed=false;
+			$.ajax({
+					url: src,
+					type : "GET",  
+					dataType: 'json',  
+					success:function(result){
+						if(result.error){
+							
+						}else if(result.data.user){
+							self.ssUser=result.data.user;
+							self.refreshed=true;
+						}else{
+						
+							
+						}	
+					},
+					error:function(request, textStatus, errorThrown){
+						console.log("Error: " + textStatus);
+					}
+			 }); 
 		},
 		login:function(){
 			var self = this;

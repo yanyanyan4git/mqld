@@ -26,6 +26,7 @@ public class UserDaoImpl implements UserDao {
 	private static final String MANAGE_USER ="UPDATE user SET name=?,authority=? WHERE ID=?";
 	private static final String UPDATE_TEACHER="UPDATE teacher SET contactInfo=?,style=?,startWorkTime=?,endWorkTime=?,maxStudentNum=? ,onWork=? WHERE userID=?";
 	private static final String DELETE_USER ="DELETE FROM user WHERE ID=?";
+	private static final String DELETE_TEACHER="DELETE FROM teacher WHERE userID=?";
 	private static final String GET_USER ="SELECT u.ID,u.name,u.gender,u.authority,t.style,t.contactInfo,t.startWorkTime,t.endWorkTime,IFNULL(t.onWork,false) AS onWork FROM user u LEFT JOIN teacher t ON u.ID=t.userID WHERE u.ID=?";
 	private static final String LOGIN_USER ="SELECT u.ID,u.name,u.gender,u.authority,t.style,t.contactInfo,t.startWorkTime,t.endWorkTime,IFNULL(t.onWork,false) AS onWork FROM user u LEFT JOIN teacher t ON u.ID=t.userID WHERE u.ID=? AND u.password=?";
 	private static final String GET_USERS="SELECT ID,name,gender,authority FROM user ORDER BY ID LIMIT ?,?";

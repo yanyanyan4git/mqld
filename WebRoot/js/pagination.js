@@ -1,7 +1,7 @@
 var Paginbar={
 		
 	 props: ['data'],
-     template: '<div align="right" ><p >Records:{{data.totalRecord}}&nbsp;</p><ul class="pagination"><li v-if="data.currentPage>1"><span v-on:click="pagin(data.currentPage-1)">&laquo;</span></li><li v-for="num in data.endPage-data.startPage+1"><span  v-on:click="pagin(num+data.startPage-1)" :class="num==data.currentPage?\'show\':\'\'">{{num+data.startPage-1}}</span></li><li v-if="data.currentPage<data.pageNum"><span v-on:click="pagin(data.currentPage+1)">&raquo;</span></li><li><p>{{data.currentPage}}/{{data.pageNum}}</p></li><li><input type="text" v-model="data.inputNum" :class="[data.inputVal?\'\':\'red\',\'pagin-input\']"></li><li><input type="button" v-on:click="inputgo" value="GO!"></li></ul></div>',
+     template: '<div align="right" ><p >记录条数:{{data.totalRecord}}&nbsp;</p><ul class="pagination"><li v-if="data.currentPage>1"><span v-on:click="pagin(data.currentPage-1)">&laquo;</span></li><li v-for="num in data.endPage-data.startPage+1"><span  v-on:click="pagin(num+data.startPage-1)" :class="num==data.currentPage?\'show\':\'\'">{{num+data.startPage-1}}</span></li><li v-if="data.currentPage<data.pageNum"><span v-on:click="pagin(data.currentPage+1)">&raquo;</span></li><li><p>{{data.currentPage}}/{{data.pageNum}}</p></li><li><input type="text" v-model="data.inputNum" :class="[data.inputVal?\'\':\'red\',\'pagin-input\']"></li><li><input type="button" v-on:click="inputgo" value="GO!"></li></ul></div>',
      
      methods: {
       	 	pagin: function (num) {

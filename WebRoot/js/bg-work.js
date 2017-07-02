@@ -24,10 +24,20 @@ var bgWorkVm = new Vue({
 					var timer=setInterval(() => {
 						if (mainVm.refreshed) {
 							var user=mainVm.ssUser;
-							teacherQueueVm.startWorkTime=user.startWorkTime;
-							teacherQueueVm.endWorkTime=user.endWorkTime;
+							
+							var startWork=user.startWorkTime;
+							var endWork=user.endWorkTime;
+							console.log(startWork);
+							console.log(endWork);
+							if (undefined!=startWork) {
+								
+								teacherQueueVm.startWorkTime=startWork;
+							}
+							if (undefined!=endWork) {
+								teacherQueueVm.endWorkTime=endWork;
+							}
+							
 							this.onWork=user.onWork;
-							console.log(11);
 							window.clearInterval(timer);
 						}
 					}, 200);

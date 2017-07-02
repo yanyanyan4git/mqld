@@ -26,7 +26,7 @@
 <body>
 	<div class="common-div" >
 		<div>
-			<div class="page-header" id="beginWork">
+			<div class="page-header" id="beginWork"  v-cloak>
 				<h1>
 					排队系统（助教端）<small>曼奇立德</small> 
 					<button class="btn btn-primary right"  type="button" @click="toggleWork">{{workBtn}}</button> 
@@ -38,7 +38,7 @@
 		
         </div>
 		<div class="left-div"  id="pagination" v-cloak>
-		
+		<div align="right"> <span class="glyphicon glyphicon-repeat signal" title="刷新" @click="refresh" aria-hidden="true"></span> </div>
 			<table class="table table-hover">
 				<thead>
 					<tr>
@@ -63,7 +63,7 @@
 			<paginbar :data="$data"  v-on:pagin="go"  v-on:inputgo="inputGo"></paginbar>
 			
 		</div>
-		<div class="right-div" id="queue" v-cloak>
+		<div class="right-div" id="tQueue" v-cloak>
 				<div >
 					<h3>
 						信息

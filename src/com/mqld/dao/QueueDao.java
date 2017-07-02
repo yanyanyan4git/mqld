@@ -2,6 +2,7 @@ package com.mqld.dao;
 
 import com.mqld.model.Page;
 import com.mqld.model.QueueItem;
+import com.mqld.model.QueueProcess;
 
 public interface QueueDao {
 
@@ -9,7 +10,7 @@ public interface QueueDao {
 
 	Page<QueueItem> getStudentStatus(String teacherID,Page<QueueItem> page);
 
-	boolean Queue(QueueItem queue);
+	boolean queue(QueueItem queue);
 
 	boolean resolveQueue(QueueItem queue);
 
@@ -20,4 +21,12 @@ public interface QueueDao {
 	int getTeacherCount();
 	
 	int getStudentCount(String teacherID);
+	
+	QueueItem getStudentCurrentStatus(String id);
+	
+	Page<QueueItem> getQueueInfo(String id,Page<QueueItem> page);
+
+	QueueProcess getTeacherQueueProcess(String teacherID);
+
+	boolean addEvaluation(QueueItem qItem);
 }

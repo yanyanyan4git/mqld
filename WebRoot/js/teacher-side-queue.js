@@ -1,7 +1,7 @@
 
 
 		var teacherQueueVm = new Vue({
-			el : '#queue',
+			el : '#tQueue',
 			data : {
 				action:'排队处理',
 				actions:['排队处理','工作时间'],
@@ -30,8 +30,10 @@
 						return null;
 					}else {
 						var item=paginVm.records[paginVm.recordIndex];
+						if (item==null) {
+							return null;
+						}
 						this.studentName=item.studentName;
-						console.log(item.ID);
 						this.queueID=item.ID;
 						return item;
 					}
@@ -83,11 +85,20 @@
 								self.result=self.studentName+"解决失败";
 								self.success=false;
 							}else {
+								
 								self.result=self.studentName+"解决成功";
 								self.success=true;
+								self.clearField();
+								paginVm.refresh();
 							}
 						} 
 					});
+				},
+				clearField:function(){
+					this.path='';
+					this.comment='';
+					this.queueID='';
+					this.studentName='';
 				}
 			}
 		});

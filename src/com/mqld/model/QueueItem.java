@@ -21,7 +21,9 @@ public class QueueItem {
 	private String attitude;
 	private String perfComment;
 	private int currentQueueNum;
+	private int totalQueueNum;
 	private int pictureNum;
+	private boolean teacherOnWork;
 	
 	public String getStudentID() {
 		return studentID;
@@ -148,6 +150,18 @@ public class QueueItem {
 	}
 	public void setCreateTime(String createTime) {
 		this.createTime = createTime;
+	}
+	public int getTotalQueueNum() {
+		return totalQueueNum;
+	}
+	public void setTotalQueueNum(int totalQueueNum) {
+		this.totalQueueNum = totalQueueNum;
+	}
+	public boolean isTeacherOnWork() {
+		return teacherOnWork;
+	}
+	public void setTeacherOnWork(boolean teacherOnWork) {
+		this.teacherOnWork = teacherOnWork;
 	}
 	
 }

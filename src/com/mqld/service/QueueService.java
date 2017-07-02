@@ -10,5 +10,8 @@ public interface QueueService {
 	boolean resolveQueue(QueueItem queue);
 	boolean cancelQueue(String id);
 	boolean isQueued(String id);
-	
+	QueueItem getStuCurrStatus(String stuID);
+	Page<QueueItem> getQueueHistory(String stuID,Page<QueueItem> page);
+	boolean canQueue(String teacherID);
+	boolean evaluate(QueueItem qItem);
 }

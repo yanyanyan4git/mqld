@@ -26,7 +26,7 @@
 				</h1>
 			</div>
 		</div>
-		<div class="left-div" id="pagination">
+		<div class="left-div" id="pagination"  v-cloak>
 		<div>
 			<div align="right"> <span class="glyphicon glyphicon-repeat signal" title="刷新" @click="refresh" aria-hidden="true"></span> </div>
 			<table class="table table-hover">
@@ -38,7 +38,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr v-for="(item,index) in records" @click="recordIndex=index">
+					<tr v-for="(item,index) in records" :class="index==recordIndex?'info':''" @click="recordIndex=index">
 						<th scope="row">{{item.ID}}</th>
 						<td>{{item.name}}</td>
 						<td>{{item.authority}}</td>
@@ -48,7 +48,7 @@
 		</div>
 		<paginbar :data="$data"  v-on:pagin="go"  v-on:inputgo="inputGo"></paginbar>
 		</div>
-		<div class="right-div" id="manager">
+		<div class="right-div" id="manager"  v-cloak>
 				<div >
 					<h3>
 						信息
@@ -70,9 +70,9 @@
 					<feedback :success="success" :result="result"></feedback>
 					<button  type="button" class="btn btn-primary form-btn" :disabled="nullField"
 						 @click="submit">修改</button>
-
+					
 				</form>
-				<div class="hidden">{{user.ID}}</div>
+				<div class="hidden">{{user}}</div>
 				</div>
 			</div>
 	</div>

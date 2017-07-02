@@ -5,6 +5,7 @@
 		overflow-y:hidden;
 	}
 .common-div{
+	width:1500px;
 	margin-right: 100px;
 }
 .left-div{
@@ -36,4 +37,9 @@ li,a{
 }
 .form-header{
 	margin-bottom: 50px;
+}
+.short-input{
+	margin-top: -5px;
+	width:75px;
+	text-align: center;
 }

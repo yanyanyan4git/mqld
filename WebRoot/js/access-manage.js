@@ -19,11 +19,7 @@
 			computed: {
 				user: function () {
 					if (paginVm.recordIndex==null) {
-						return {
-							ID:'',
-							name:'',
-							authority:'---请选择权限--- '
-						};
+						return null;
 					}else {
 						var item=paginVm.records[paginVm.recordIndex];
 						this.ID=item.ID;
@@ -60,6 +56,7 @@
 							}else {
 								self.result=self.ID+"修改成功";
 								self.success=true;
+								paginVm.refresh();
 							}
 						} 
 					});

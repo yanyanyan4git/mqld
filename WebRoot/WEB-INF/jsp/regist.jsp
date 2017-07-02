@@ -20,7 +20,7 @@
 <script type="text/javascript" src="js/vue.js"></script>
 <script type="text/javascript" src="js/jquery-3.2.1.js"></script>
 <script type="text/javascript" src="js/bootstrap.js"></script>
-
+<script type="text/javascript" src="js/bootstrap-select.js"></script>  
 <style type="text/css">
 </style>
 </head>
@@ -70,9 +70,19 @@
 					</field>
 					
 					<field  v-show="type=='助教'" :error="styleError" labelname="风格">
-						<selector :selected="style">
-							<li v-for="style in styles" @click="toggleStyle(style)"><a>{{style}}</a></li>
-						</selector>
+                                <select id="usertype" name="usertype" class="selectpicker show-tick form-control"  multiple data-live-search="false" >
+                                        <option value="日系设计">日系设计</option>
+                                        <option value="韩式写实设计">韩式写实设计</option>
+                                        <option value="Q版设计">Q版设计</option>
+                                        <option value="机甲设计">机甲设计</option>
+                                        <option value="欧美设计">欧美设计</option>
+                                        <option value="插图">插图</option>
+                                        <option value="结构">结构</option>
+                                        <option value="色彩">色彩</option>
+                                        <option value="怪物">怪物</option>
+                                </select>
+                           
+						
 					</field>
 					
 					

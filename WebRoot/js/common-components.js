@@ -1,6 +1,6 @@
 var Selector={
-	  props: ['selected'],
-	  template: '<div class="btn-group right"><button type="button" class="btn btn-default dropdown-toggle"data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{selected}}</button> <ul class="dropdown-menu"><slot></slot></ul></div>'
+	  props: ['selected','disab'],
+	  template: '<div class="btn-group right"><button type="button" class="btn btn-default dropdown-toggle"data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" :disabled="disab" style="width=100px;">{{selected}}</button> <ul class="dropdown-menu"><slot></slot></ul></div>'
 	}
 
 var FormField={

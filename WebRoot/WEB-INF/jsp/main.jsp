@@ -24,7 +24,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 </head>
 <body>
 
-	<div id="main">
+	<div id="main"  v-cloak>
 		<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
 			aria-labelledby="myModalLabel" aria-hidden="true" style="top: 20%;" >
 			<div class="modal-dialog">
@@ -65,7 +65,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		</div>
 		<div id="topBar">
 			<nav class="navbar navbar-default navbar-fixed-top" >
-				<a class="navbar-brand" href="#">曼奇利德</a>
+				<a class="navbar-brand" href="#">曼奇立德</a>
 				<button id="logout" type="button" class="btn btn-default navbar-btn right" @click="logout">登出</button><a class="navbar-brand right"  href="#">${user.name}</a>
 			</nav>
 		</div>
@@ -98,7 +98,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		});
 		var student=["queue","queueStatus"];
 		var teacher=["teacherSideQueue"];
-		
+		var admin=["accessManage","regist","queue"];
 		$(document).ready(function(){
 			 if(top.location!=self.location)
 				     {
@@ -108,7 +108,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			 var authority="${user.authority}";
 			 $("#sideBar ul li[name='welcome']").show();
 			 if (authority=="管理员") {
-				 $("#sideBar ul li").show();
+				 for (var i = 0; i < admin.length; i++) {
+					 $("#sideBar ul li[name='"+admin[i]+"']").show();
+				}
 			}else if (authority=="学生") {
 				for (var i = 0; i < student.length; i++) {
 					 $("#sideBar ul li[name='"+student[i]+"']").show();

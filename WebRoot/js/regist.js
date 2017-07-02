@@ -4,16 +4,7 @@
 var registVm = new Vue({
 	el : '#registPage',
 	data : {
-		style:'---请选择助教风格---',
-		styles : ['日系设计',
-			'韩式写实设计',
-			'Q版设计',
-			'机甲设计',
-			'欧美设计',
-			'插图',
-			'结构',
-			'色彩',
-			'怪物'],
+		
 		types:['学生','助教'],
 		type:'学生',
 		ID:'',
@@ -43,10 +34,15 @@ var registVm = new Vue({
 			}
 		}
 	},
+	mounted:function(){
+		 $('#usertype').selectpicker({
+			 noneSelectedText:"请选择助教风格",
+			 actionsBox:true,
+			 deselectAllText:'全不选',
+			 selectAllText:'全选'
+		    });
+	},
 	methods : {
-		toggleStyle:function(style){
-			this.style=style;   
-		},
 		toggleTab:function(type){
 			this.type=type;
 			this.fixID=false;
@@ -78,7 +74,7 @@ var registVm = new Vue({
 			}
 			var self = this;
 			var serialData=$( "#form").serialize();
-			var src = "doRegist.action?" +serialData+"&userType="+this.type+"&style="+this.style;
+			var src = "doRegist.action?" +serialData+"&userType="+this.type+"&style="+ $('#usertype').val();
 			 $.ajax({
 					url: src,
 					dataType:"json",
@@ -114,7 +110,7 @@ var registVm = new Vue({
 			var regex=/^[Ss]\d{6}$/;
 			if (this.type=='助教') {
 				regex=/^[Tt]\d{6}$/;
-				if (this.style=='---请选择助教风格---') {
+				if ($('#usertype').val().length==0) {
 					this.styleError='未选择风格';
 					flag=false;
 				}else {

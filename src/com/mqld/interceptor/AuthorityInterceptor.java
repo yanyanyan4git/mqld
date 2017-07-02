@@ -21,7 +21,6 @@ public class AuthorityInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        logger.debug("");
         HandlerMethod handler2=(HandlerMethod) handler;
         FireAuthority fireAuthority = handler2.getMethodAnnotation(FireAuthority.class);
 

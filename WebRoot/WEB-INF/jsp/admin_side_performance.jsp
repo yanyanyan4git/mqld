@@ -31,6 +31,7 @@
 				<thead>
 					<tr>
 						<th>排队编号</th>
+						<th>助教姓名</th>
 						<th>学生姓名</th>
 						<th>学生路径</th>
 						<th>学生备注</th>
@@ -44,6 +45,7 @@
 				<tbody>
 					<tr v-for="(item,index) in records" :class="index==recordIndex?'info':''" @click="recordIndex=index">
 						<th scope="row">{{item.ID}}</th>
+						<td>{{item.teacherName}}</td>
 						<td>{{item.studentName}}</td>
 						<td>{{item.studentPath}}</td>
 						<td>{{item.studentComment}}</td>
@@ -63,5 +65,5 @@
 	</div>
 </body>
 <script type="text/javascript" src="js/pagination.js"></script>
-<script type="text/javascript" src="js/performance.js"></script>
+<script type="text/javascript" src="js/admin-side-performance.js"></script>
 </html>

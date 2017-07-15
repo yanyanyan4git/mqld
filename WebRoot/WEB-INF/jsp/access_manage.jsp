@@ -28,17 +28,23 @@
 		</div>
 		<div class="left-div" id="pagination"  v-cloak>
 		<div>
-			<div align="right"> <span class="glyphicon glyphicon-repeat signal" title="刷新" @click="refresh" aria-hidden="true"></span> </div>
+			<div align="right"> 
+			<span class="glyphicon glyphicon-minus signal" title="删除所选用户" @click="del" aria-hidden="true"></span>
+			<span class="glyphicon glyphicon-repeat signal" title="刷新" @click="refresh" aria-hidden="true"></span>
+			 </div>
 			<table class="table table-hover">
 				<thead>
 					<tr>
+						<td><input type="checkbox" @click="checkAll(this)"></td>
 						<th>ID</th>
 						<th>姓名</th>
 						<th>权限</th>
 					</tr>
 				</thead>
 				<tbody>
+					
 					<tr v-for="(item,index) in records" :class="index==recordIndex?'info':''" @click="recordIndex=index">
+						<td><input type="checkbox" :value="item.ID"  v-model="IDs"></td>
 						<th scope="row">{{item.ID}}</th>
 						<td>{{item.name}}</td>
 						<td>{{item.authority}}</td>

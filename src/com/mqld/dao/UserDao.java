@@ -11,11 +11,13 @@ public interface UserDao {
 	boolean addTeacher(User user);
 	boolean manageUser(User user);
 	boolean updateTeacher(User user);
-	boolean deleteUser(String ID);
 	User getUser(String id );
 	User login(String id ,String password);
 	Page<User> getUsers(Page<User> page);
 	Page<User> getUsers(String authority,Page<User> page);
 	int getUserCount();
 	int getUserCount(String authority);
+	int batchDeleteUsers(List<String> iD);
+	boolean setPassWord(String iD, String psw);
+	int batchDeleteUsersFromQueue(List<String> iD);
 }

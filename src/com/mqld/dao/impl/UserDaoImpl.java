@@ -1,11 +1,14 @@
 package com.mqld.dao.impl;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -23,10 +26,13 @@ public class UserDaoImpl implements UserDao {
 	JdbcTemplate JdbcTemplate;
 	private static final String ADD_USER ="INSERT INTO user(ID,name,gender,password,authority) VALUES(?,?,?,?,?)";
 	private static final String ADD_TEACHER ="INSERT INTO teacher(userID,contactInfo,style,startWorkTime,endWorkTime,maxStudentNum) VALUES(?,?,?,?,?,?)";
+	private static final String UPDATE_PASSWORD ="UPDATE user SET password=? WHERE ID=?";
 	private static final String MANAGE_USER ="UPDATE user SET name=?,authority=? WHERE ID=?";
 	private static final String UPDATE_TEACHER="UPDATE teacher SET contactInfo=?,style=?,startWorkTime=?,endWorkTime=?,maxStudentNum=? ,onWork=? WHERE userID=?";
 	private static final String DELETE_USER ="DELETE FROM user WHERE ID=?";
+	private static final String DELETE_USER_FROM_QUEUE ="DELETE FROM queue WHERE teacherID=? OR studentID=?";
 	private static final String DELETE_TEACHER="DELETE FROM teacher WHERE userID=?";
+	private static final String GET_TEACHER="SELECT * FROM teacher WHERE userID=?";
 	private static final String GET_USER ="SELECT u.ID,u.name,u.gender,u.authority,t.style,t.contactInfo,t.startWorkTime,t.endWorkTime,IFNULL(t.onWork,false) AS onWork FROM user u LEFT JOIN teacher t ON u.ID=t.userID WHERE u.ID=?";
 	private static final String LOGIN_USER ="SELECT u.ID,u.name,u.gender,u.authority,t.style,t.contactInfo,t.startWorkTime,t.endWorkTime,IFNULL(t.onWork,false) AS onWork FROM user u LEFT JOIN teacher t ON u.ID=t.userID WHERE u.ID=? AND u.password=?";
 	private static final String GET_USERS="SELECT ID,name,gender,authority FROM user ORDER BY ID LIMIT ?,?";
@@ -67,11 +73,25 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	@Override
-	public boolean deleteUser(String ID) {
+	public int batchDeleteUsers(final List<String> ID) {
 		logger.debug("Begin to DELETE_USER");
-		int	count=JdbcTemplate.update(DELETE_USER,ID);
-		logger.debug("complete to DELETE_USER..."+count);
-		return count>0;
+		int[] updatedCountArray=JdbcTemplate.batchUpdate(DELETE_USER, new BatchPreparedStatementSetter() {
+			@Override
+			public void setValues(PreparedStatement ps, int i) throws SQLException {
+				ps.setString(1, ID.get(i));
+			}
+			@Override
+			public int getBatchSize() {
+				
+				return ID.size();
+			}
+		});
+		int count = 0;
+		for (int a : updatedCountArray) {
+			count += a;
+		}
+		logger.debug("complete to DELETE_USER..." + count);
+		return count;
 	}
 
 	@Override
@@ -138,6 +158,38 @@ public class UserDaoImpl implements UserDao {
 		int count = JdbcTemplate.queryForObject(GET_USER_COUNT_BY_AUTHORITY, Integer.class,authority);
 		logger.debug("complete to GET_USER_COUNT_BY_AUTHORITY...");
 		return count;
+	}
+
+	@Override
+	public boolean setPassWord(String iD, String psw) {
+		logger.debug("Begin to UPDATE_PASSWORD");
+		int	count=JdbcTemplate.update(UPDATE_PASSWORD,psw,iD);
+		logger.debug("complete to UPDATE_PASSWORD..."+count);
+		return count>0;
+	}
+
+	@Override
+	public int batchDeleteUsersFromQueue(final List<String> ID) {
+		logger.debug("Begin to DELETE_USER_FROM_QUEUE");
+		int[] updatedCountArray=JdbcTemplate.batchUpdate(DELETE_USER_FROM_QUEUE, new BatchPreparedStatementSetter() {
+			@Override
+			public void setValues(PreparedStatement ps, int i) throws SQLException {
+				ps.setString(1, ID.get(i));
+				ps.setString(2, ID.get(i));
+			}
+			@Override
+			public int getBatchSize() {
+				
+				return ID.size();
+			}
+		});
+		int count = 0;
+		for (int a : updatedCountArray) {
+			count += a;
+		}
+		logger.debug("complete to DELETE_USER_FROM_QUEUE..." + count);
+		return count;
+		
 	}
 	
 	

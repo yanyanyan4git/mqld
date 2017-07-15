@@ -42,6 +42,28 @@ public class LoginController {
 		}
 	}
 	
+	@RequestMapping(value="/updatePsw", method = RequestMethod.POST,consumes = "application/json")				
+	public void updatePsw(@RequestBody Map<String, String> jObject,HttpServletRequest request,HttpServletResponse response ,HttpSession session){
+		
+			User user=(User) session.getAttribute("user");
+			String password = jObject.get("password");
+			User newUser=userService.login(user.getID(), password);
+			if (null==newUser) {
+				JsonUtil.flushError(response, "failed");
+				return;
+			}
+			String newPassword = jObject.get("newPassword");
+		boolean flag=userService.setPassWord(user.getID(), newPassword);
+		if (!flag) {
+			JsonUtil.flushError(response, "failed");
+		}else {
+			Map< String, Object> data=new TreeMap<String, Object>();
+			data.put("success", true);
+			session.setAttribute("user", null);
+			JsonUtil.flushData(response, data);
+		}
+	}
+	
 	@RequestMapping("/logout")				
 	public void logout(HttpServletRequest request,HttpServletResponse response ,HttpSession session){
 		System.out.println(11);

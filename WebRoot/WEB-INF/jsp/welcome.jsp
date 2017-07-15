@@ -19,7 +19,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 
 <body class="noscroll">
-		<div class="jumbotron common-div" style="height:100%;">
+		<div class="jumbotron " style="height:100%;">
 		<div class="container">
   
 			<h1>你好, 同学</h1>
@@ -28,6 +28,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 </div>
 </body>
 <script type="text/javascript">
-	
+var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串
+console.log(userAgent);
 	</script>
 </html>

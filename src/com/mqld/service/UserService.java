@@ -1,5 +1,7 @@
 package com.mqld.service;
 
+import java.util.List;
+
 import com.mqld.model.Page;
 import com.mqld.model.User;
 
@@ -11,5 +13,6 @@ public interface UserService {
 	User getUser(String id);
 	boolean updateTeacher(User user);
 	boolean manageUser(String ID,String name,String authority);
-	boolean delUser(String iD);
+	int delUsers(final List<String> iD);
+	boolean setPassWord(String ID,String psw);
 }

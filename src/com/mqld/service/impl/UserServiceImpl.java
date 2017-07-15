@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,9 +106,22 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean delUser(String iD) {
-		
-		return userDao.deleteUser(iD);
+	public int delUsers(final List<String> ID) {
+		int count=userDao.batchDeleteUsers(ID);
+		if (count==0) {
+			return 0;
+		}
+		userDao.batchDeleteUsersFromQueue(ID);
+		return count;
+	}
+
+	@Override
+	public boolean setPassWord(String ID, String psw) {
+		if (StringUtils.validateEmpty(ID,psw)) {
+			logger.error("null parameter");
+			return false;
+		}
+		return userDao.setPassWord(ID,psw);
 	}
 	
 }

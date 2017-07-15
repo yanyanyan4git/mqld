@@ -1,5 +1,9 @@
 package com.mqld.controller;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -7,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -67,16 +73,21 @@ public class AccessManageController {
 	
 	@FireAuthority(authorityTypes=AuthorityType.ADMIN, resultType=ResultType.json)
 	@RequestMapping("/delUser")				
-	public void delUser( HttpServletRequest request ,@RequestParam("ID")String ID,HttpServletResponse response){
+	public void delUser( HttpServletRequest request ,@RequestParam("IDs")String ID,HttpServletResponse response){
 		logger.debug(">>doMangement");
+		String [] IDArr=ID.split(",");
+		final List<String> IDs=new ArrayList<String>();
+		for(String id:IDArr){
+			IDs.add(id);
+		}
 		
-		boolean flag=userService.delUser(ID);
-		if (flag) {
+		int sucessCount=userService.delUsers(IDs);
+		if (sucessCount==IDs.size()) {
 			Map<String, Object> data=new TreeMap<String, Object>();
-			data.put("result", flag);
+			data.put("result", true);
 			JsonUtil.flushData(response, data);
 		}else {
-			JsonUtil.flushError(response, "false");
+			JsonUtil.flushError(response, "É¾³ý³É¹¦£º"+sucessCount+"£¬É¾³ýÊ§°Ü£º"+(IDs.size()-sucessCount));
 		}
 		
 	}

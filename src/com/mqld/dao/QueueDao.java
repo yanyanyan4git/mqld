@@ -29,4 +29,12 @@ public interface QueueDao {
 	QueueProcess getTeacherQueueProcess(String teacherID);
 
 	boolean addEvaluation(QueueItem qItem);
+
+	Page<QueueItem> getTeacherPerf(String ID,Page<QueueItem> page);
+
+	Page<QueueItem> getBadPerf(Page<QueueItem> page);
+
+	int getTeacherPerfCount(String ID);
+
+	int getBadPerfCount();
 }

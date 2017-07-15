@@ -22,6 +22,9 @@
 						return null;
 					}else {
 						var item=paginVm.records[paginVm.recordIndex];
+						if (item==null) {
+							return null;
+						}
 						this.ID=item.ID;
 						this.name=item.name;
 						this.authority=item.authority;
@@ -35,6 +38,7 @@
 			},
 			mounted:function(){
 				paginVm.preUrl ="getUsers.action?&userType="+this.userType;
+				paginVm.preDelUrl ="delUser.action?";
 				paginVm.go(1);
 			},
 			methods : {

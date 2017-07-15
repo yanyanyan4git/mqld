@@ -29,14 +29,11 @@
 			<div class="page-header" id="beginWork"  v-cloak>
 				<h1>
 					排队系统（助教端）<small>曼奇立德</small> 
-					<button class="btn btn-primary right"  type="button" @click="toggleWork">{{workBtn}}</button> 
+					<button class="btn btn-primary right"  type="button" @click="toggleWork">{{onWork?workBtns[1]:workBtns[0]}}</button> 
 				</h1>
 			</div>
 		</div>
 		<div>
-		<div style="display: inline;" >
-		
-        </div>
 		<div class="left-div"  id="pagination" v-cloak>
 		<div align="right"> <span class="glyphicon glyphicon-repeat signal" title="刷新" @click="refresh" aria-hidden="true"></span> </div>
 			<table class="table table-hover">
@@ -117,8 +114,9 @@
 </body>
 <script type="text/javascript" src=js/common-components.js></script>
 <script type="text/javascript" src="js/pagination.js"></script>
-<script type="text/javascript" src="js/bg-work.js"></script>
 <script type="text/javascript" src="js/teacher-side-queue.js"></script>
+<script type="text/javascript" src="js/bg-work.js"></script>
+
 <script type="text/javascript">
 
 

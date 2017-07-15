@@ -14,4 +14,6 @@ public interface QueueService {
 	Page<QueueItem> getQueueHistory(String stuID,Page<QueueItem> page);
 	boolean canQueue(String teacherID);
 	boolean evaluate(QueueItem qItem);
+	Page<QueueItem> getTeacherPerf(String ID,Page<QueueItem> page);
+	Page<QueueItem> getBadPerf(Page<QueueItem> page);
 }

@@ -1,3 +1,5 @@
+var timer;
+var mainVm=parent.mainVm;
 var bgWorkVm = new Vue({
 			el : '#beginWork',
 			data : {
@@ -21,14 +23,42 @@ var bgWorkVm = new Vue({
 				setUserStatus:function(){
 					var mainVm=parent.mainVm;
 					mainVm.getUser();
-					var timer=setInterval(() => {
-						if (mainVm.refreshed) {
-							var user=mainVm.ssUser;
+					var self=this;
+					timer=setInterval(function(){
+					if (mainVm.refreshed) {
+						console.log(22);
+							var user=mainVm.$data.ssUser;
 							
 							var startWork=user.startWorkTime;
 							var endWork=user.endWorkTime;
 							console.log(startWork);
 							console.log(endWork);
+							console.log(user.onWork);
+							if (undefined!=startWork) {
+								
+								teacherQueueVm.startWorkTime=startWork;
+							}
+							if (undefined!=endWork) {
+								teacherQueueVm.endWorkTime=endWork;
+							}
+							
+							self.onWork=user.onWork;
+							window.clearInterval(timer);
+						}
+					} , 200);
+				},
+				setFunc:function(){
+					var mainVm=parent.mainVm;
+						console.log(11);
+						if (mainVm.refreshed) {
+						console.log(22);
+							var user=mainVm.$data.ssUser;
+							
+							var startWork=user.startWorkTime;
+							var endWork=user.endWorkTime;
+							console.log(startWork);
+							console.log(endWork);
+							console.log(user.onWork);
 							if (undefined!=startWork) {
 								
 								teacherQueueVm.startWorkTime=startWork;
@@ -40,11 +70,11 @@ var bgWorkVm = new Vue({
 							this.onWork=user.onWork;
 							window.clearInterval(timer);
 						}
-					}, 200);
+					
 				},
 				toggleWork:function(){
 					var self = this;
-					
+					console.log(this.onWork);
 					var src = "setOnWork.action?onWork="+!this.onWork;
 					$.ajax({
 						url :src,

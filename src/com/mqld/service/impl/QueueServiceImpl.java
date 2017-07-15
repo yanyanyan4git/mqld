@@ -106,6 +106,20 @@ public class QueueServiceImpl implements QueueService {
 		return queueDao.addEvaluation(qItem);
 	}
 
+	@Override
+	public Page<QueueItem> getTeacherPerf(String ID,Page<QueueItem> page) {
+		int count=queueDao.getTeacherPerfCount(ID);
+		page.setTotalRecord(count);
+		return queueDao.getTeacherPerf( ID,page);
+	}
+
+	@Override
+	public Page<QueueItem> getBadPerf(Page<QueueItem> page) {
+		int count=queueDao.getBadPerfCount();
+		page.setTotalRecord(count);
+		return queueDao.getBadPerf( page);
+	}
+
 	
 
 

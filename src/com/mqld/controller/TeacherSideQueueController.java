@@ -37,14 +37,11 @@ public class TeacherSideQueueController {
 	
 	@FireAuthority(authorityTypes=AuthorityType.TEACHER, resultType=ResultType.json)
 	@RequestMapping("/resolveQueue")				
-	public void resolveQueue(HttpServletRequest request,HttpServletResponse response,HttpSession session){
-		String path=request.getParameter("path");
-		String comment=request.getParameter("comment");
-		String queueID=request.getParameter("queueID");
+	public void resolveQueue(HttpServletRequest request,@RequestParam("comment")String comment,@RequestParam("path")String path,@RequestParam("queueID")String queueID,HttpServletResponse response,HttpSession session){
 		QueueItem queueItem=new QueueItem();
 		queueItem.setID(Integer.parseInt(queueID));
-		queueItem.setStudentPath(path);
-		queueItem.setStudentComment(comment);
+		queueItem.setTeacherPath(path);
+		queueItem.setTeacherComment(comment);
 		boolean flag=queueService.resolveQueue(queueItem);
 		if (flag) {
 			Map<String, Object> data=new TreeMap<String, Object>();

@@ -26,6 +26,7 @@ var paginVm = new Vue({
 				startPage : 0,
 				endPage : 0,
 				pageInputNum : '',
+				paramData:null,
 				totalRecord : 0,
 				inputNum:'',
 				userType:'',
@@ -35,7 +36,7 @@ var paginVm = new Vue({
 				allChecked:false
 			}, 
 			components: {
-			    'paginbar': Paginbar,
+			    'paginbar': Paginbar
 			},
 			computed: {
 				  inputValidate: function () {
@@ -121,8 +122,10 @@ var paginVm = new Vue({
 					var self = this;
 					$.ajax({
 						url :self.url,
-						method : 'GET',
+						method : 'POST',
 						dataType:'json',
+						data:self.paramData,
+						contentType:"application/json",
 						success:function(result){
 							self.dealWithResponse(result.data);
 							self.IDs=[];

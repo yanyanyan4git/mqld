@@ -73,6 +73,12 @@ var bgWorkVm = new Vue({
 					
 				},
 				toggleWork:function(){
+					var startTime=$('#startTime').val();
+					var endTime=$('#endTime').val();
+					if (startTime==''||endTime=='') {
+						alert("请先设置上班或下班时间");
+						return;
+					}
 					var self = this;
 					console.log(this.onWork);
 					var src = "setOnWork.action?onWork="+!this.onWork;

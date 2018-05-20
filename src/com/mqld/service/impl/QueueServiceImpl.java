@@ -10,6 +10,7 @@ import com.mqld.service.QueueService;
 import com.mqld.util.StringUtils;
 import com.mqld.model.QueueItem;
 import com.mqld.model.QueueProcess;
+import com.mqld.model.TeachersPerfQueryConditionDTO;
 
 @Service
 public class QueueServiceImpl implements QueueService {
@@ -114,10 +115,9 @@ public class QueueServiceImpl implements QueueService {
 	}
 
 	@Override
-	public Page<QueueItem> getBadPerf(Page<QueueItem> page) {
-		int count=queueDao.getBadPerfCount();
-		page.setTotalRecord(count);
-		return queueDao.getBadPerf( page);
+	public Page<QueueItem> getTeachersPerf(TeachersPerfQueryConditionDTO condition,Page<QueueItem> page) {
+		
+		return queueDao.getTeachersPerf(condition,page);
 	}
 
 	

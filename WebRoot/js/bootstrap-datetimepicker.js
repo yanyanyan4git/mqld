@@ -638,7 +638,8 @@
         top = offset.top + this.height;
       }
 
-      top = top - containerOffset.top;
+//      top = top - containerOffset.top;
+      top=offset.top + 30;
       left = left - containerOffset.left;
 
       this.picker.css({

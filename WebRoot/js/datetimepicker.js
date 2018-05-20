@@ -1,5 +1,6 @@
 	function initTimePicker(input){
 		input.datetimepicker({
+			bootcssVer:3,
 			autoclose : true,
 			clearBtn : true,
 			startView:1,
@@ -13,32 +14,35 @@
 	
 	function initDatePicker(input){
 		input.datetimepicker({
+			bootcssVer:3,
 			autoclose : true,
 			todayBtn : "linked",
 			clearBtn : true,
 			todayHighlight : true,
 			startView:2,
 			minView: 2,
-			format:"mm/dd/yyyy",
+			format:"yyyy-mm-dd",
 			forceParce:false
 		});
 	}
 	
 	function initMonthPicker(input){
 		input.datetimepicker({
+			bootcssVer:3,
 			autoclose : true,
 			todayBtn : "linked",
 			clearBtn : true,
 			todayHighlight : true,
 			startView:3,
 			minView: 3,
-			format:"mm/yyyy",
+			format:"yyyy-mm",
 			forceParce:false
 		});
 	}
 	
 	function initYearPicker(input){
 		input.datetimepicker({
+			bootcssVer:3,
 			autoclose : true,
 			todayBtn : "linked",
 			clearBtn : true,

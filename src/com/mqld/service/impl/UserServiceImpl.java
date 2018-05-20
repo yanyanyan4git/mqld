@@ -64,7 +64,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean manageUser(String ID,String name,String authority) {
+	public boolean manageUser(String ID,String name,String authority,String psw) {
 		if (StringUtils.validateEmpty(ID,name,authority)) {
 			logger.error("null parameter");
 			return false;
@@ -74,6 +74,9 @@ public class UserServiceImpl implements UserService {
 		user.setName(name);
 		user.setAuthority(authority);
 		boolean flag=userDao.manageUser(user);
+		if (!StringUtils.isEmpty(psw)) {
+			userDao.setPassWord(ID, psw);
+		}
 		return flag;
 	}
 

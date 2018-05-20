@@ -16,6 +16,7 @@
 .right-div{
 	float: left; 
 	display:inline;
+	
 	margin-left: 100px;
 }
 textarea{
@@ -42,4 +43,7 @@ li,a{
 	margin-top: -5px;
 	width:75px;
 	text-align: center;
+}
+th{
+	white-space:nowrap;
 }

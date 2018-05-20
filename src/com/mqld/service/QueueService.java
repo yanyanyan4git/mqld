@@ -2,6 +2,7 @@ package com.mqld.service;
 
 import com.mqld.model.Page;
 import com.mqld.model.QueueItem;
+import com.mqld.model.TeachersPerfQueryConditionDTO;
 
 public interface QueueService {
 	Page<QueueItem> getTeacherStatus(Page<QueueItem> page);
@@ -15,5 +16,5 @@ public interface QueueService {
 	boolean canQueue(String teacherID);
 	boolean evaluate(QueueItem qItem);
 	Page<QueueItem> getTeacherPerf(String ID,Page<QueueItem> page);
-	Page<QueueItem> getBadPerf(Page<QueueItem> page);
+	Page<QueueItem> getTeachersPerf(TeachersPerfQueryConditionDTO condition, Page<QueueItem> page);
 }

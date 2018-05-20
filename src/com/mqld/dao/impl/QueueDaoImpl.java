@@ -1,6 +1,14 @@
 package com.mqld.dao.impl;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +24,8 @@ import com.mqld.dao.QueueDao;
 import com.mqld.model.Page;
 import com.mqld.model.QueueItem;
 import com.mqld.model.QueueProcess;
+import com.mqld.model.TeachersPerfQueryConditionDTO;
+import com.mqld.util.JdbcUtil;
 import com.mqld.util.StringUtils;
 
 @Repository
@@ -37,12 +47,15 @@ public class QueueDaoImpl implements QueueDao {
 	private static final String  ADD_EVALUATION="INSERT INTO performance(queueID,profLevel,attitude,perfComment) VALUES(?,?,?,?)";
 	private static final String EVALUATE_QUEUE="UPDATE queue SET status=? WHERE ID=?";
 	private static final String GET_PERFORMANCE="SELECT q.ID,u.name,q.studentPath,q.studentComment,q.teacherPath,q.teacherComment,p.profLevel,p.attitude,p.perfComment FROM user u,queue q,performance p WHERE u.ID=q.studentID AND p.queueID=q.ID AND q.teacherID=? LIMIT ?,?";
-	private static final String GET_BAD_PERFORMANCE="SELECT u.name AS studentName,us.name AS teacherName,q.studentPath,q.studentComment,q.teacherPath,q.teacherComment,p.profLevel,p.attitude,p.perfComment FROM user u,user us,queue q,performance p WHERE u.ID=q.studentID AND us.ID=q.teacherID AND q.ID=p.queueID AND q.status=? AND (p.attitude+p.profLevel)<? LIMIT ?,?";
+	private static final String GET_TEACHERS_PERFORMANCE_FIELDS_PART="SELECT q.createTime,u.name AS studentName,us.name AS teacherName,us.ID ,q.studentPath,q.studentComment,q.teacherPath,q.teacherComment,p.profLevel,p.attitude,p.perfComment ";
+	private static final String GET_TEACHERS_PERFORMANCE_CONDITION_PART="FROM queue q LEFT JOIN user u ON u.ID=q.studentID LEFT JOIN user us ON us.ID=q.teacherID LEFT JOIN performance p ON q.ID=p.queueID WHERE  q.status='ÒÑÆÀ¼Û' ";
 	private static final String GET_TEACHER_PERFORMANCE_COUNT=" SELECT COUNT(*) FROM performance p ,queue q WHERE q.ID=p.queueID and q.teacherID=?";
-	private static final String GET_BAD_PERFORMANCE_COUNT="SELECT COUNT(*) FROM performance p ,queue q WHERE (p.attitude+p.profLevel)<? AND q.ID=p.queueID AND q.status=?";
+	private static final String GET_COUNT_PART="SELECT COUNT(*) ";
 	private static final Logger logger=Logger.getLogger(QueueDaoImpl.class);
+	
 	@Override
 	public boolean queue(QueueItem queue) {
+		int l=queue.getStudentComment().length();
 		logger.debug("Begin to ADD_QUEUE");
 		int	count=JdbcTemplate.update(ADD_QUEUE,Constant.STATUS_PENDING,queue.getTeacherID(),queue.getStudentID(),queue.getPictureNum(),queue.getStudentPath(),queue.getStudentComment());
 		logger.debug("complete to ADD_QUEUE..."+count);
@@ -172,13 +185,89 @@ public class QueueDaoImpl implements QueueDao {
 	}
 
 	@Override
-	public Page<QueueItem> getBadPerf(Page<QueueItem> page) {
-		RowMapper<QueueItem> rowMapper=new BeanPropertyRowMapper<QueueItem>(QueueItem.class);
-		logger.debug("Begin to GET_PERFORMANCE");
-		List<QueueItem> queues= JdbcTemplate.query(GET_BAD_PERFORMANCE, rowMapper,Constant.STATUS_EVALUATED,Constant.DEAD_SCORE,page.getStartNum(),page.getPageSize());
-		logger.debug("complete to GET_PERFORMANCE...");
-		page.setRecords(queues);
+	public Page<QueueItem> getTeachersPerf(TeachersPerfQueryConditionDTO condition,Page<QueueItem> page) {
+		condition.setPagination(true);
+		
+		DataSource dataSource=JdbcTemplate.getDataSource();
+		Connection conn=null;
+		PreparedStatement stmt=null;
+		ResultSet rs=null;
+		try {
+			conn=dataSource.getConnection();
+			condition.setPagination(true);
+			System.out.println(getTeachersPerfStatement(condition));
+			stmt=conn.prepareStatement(getTeachersPerfStatement(condition));
+			logger.debug("Begin to GET_PERFORMANCE_COUNT");
+			int i=0;
+			setStmtProp(condition, stmt, i);
+			rs=stmt.executeQuery();
+			if (rs.next()) {
+				int count=rs.getInt(1);
+				page.setTotalRecord(count);
+				}
+			stmt.close();
+			rs.close();
+			logger.debug("complete to GET_PERFORMANCE_COUNT...");
+			
+			logger.debug("Begin to GET_PERFORMANCE");
+			condition.setPagination(false);
+			System.out.println(getTeachersPerfStatement(condition));
+			stmt=conn.prepareStatement(getTeachersPerfStatement(condition));
+			int j=0;
+			j=setStmtProp(condition, stmt, j);
+			stmt.setInt(++j, page.getStartNum());
+			System.out.println("stmt.setInt("+j+","+page.getStartNum()+");");
+			stmt.setInt(++j, page.getPageSize());
+			System.out.println("stmt.setInt("+j+","+page.getPageSize()+");");
+			rs=stmt.executeQuery();
+			List<QueueItem> queues=new ArrayList<QueueItem>();
+			while (rs.next()) {
+				QueueItem qItem=new QueueItem();
+				SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+				qItem.setCreateTime(sdf.format(rs.getDate("createTime")));
+				qItem.setTeacherID(rs.getString("ID"));
+				qItem.setStudentName(rs.getString("studentName"));
+				qItem.setTeacherName(rs.getString("teacherName"));
+				qItem.setStudentPath(rs.getString("studentPath"));
+				qItem.setStudentComment(rs.getString("studentComment"));
+				qItem.setTeacherPath(rs.getString("teacherPath"));
+				qItem.setTeacherComment(rs.getString("teacherComment"));
+				qItem.setProfLevel(rs.getString("profLevel"));
+				qItem.setAttitude(rs.getString("attitude"));
+				qItem.setPerfComment(rs.getString("perfComment"));
+				queues.add(qItem);
+				}
+			page.setRecords(queues);
+			logger.debug("complete to GET_PERFORMANCE...");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			JdbcUtil.release(rs, stmt, conn);
+		}
 		return page;
+	}
+
+	private int setStmtProp(TeachersPerfQueryConditionDTO condition, PreparedStatement stmt, int i)
+			throws SQLException {
+		if (null != condition.getID()) {
+			stmt.setString(++i, condition.getID());
+			System.out.println("stmt.setString("+i+","+condition.getID()+");");
+		}
+		
+		if (!"".equals(condition.getStartCreateTime())&&!"".equals(condition.getEndCreateTime())&&null != condition.getStartCreateTime() && null != condition.getEndCreateTime()) {
+			stmt.setString(++i, condition.getStartCreateTime());
+			System.out.println("stmt.setString("+i+","+condition.getStartCreateTime()+");");
+			stmt.setString(++i, condition.getEndCreateTime());
+			System.out.println("stmt.setString("+i+","+condition.getEndCreateTime()+");");
+		}
+
+		if (null != condition.getLowTotalScore() && null != condition.getHighTotalScore()) {
+			stmt.setInt(++i, condition.getLowTotalScore());
+			System.out.println("stmt.setString("+i+","+condition.getLowTotalScore()+");");
+			stmt.setInt(++i, condition.getHighTotalScore());
+			System.out.println("stmt.setString("+i+","+condition.getHighTotalScore()+");");
+		}
+		return i;
 	}
 
 	@Override
@@ -188,13 +277,37 @@ public class QueueDaoImpl implements QueueDao {
 		logger.debug("complete to GET_TEACHER_PERFORMANCE_COUNT...");
 		return count;
 	}
+	
+	private String getTeachersPerfStatement(TeachersPerfQueryConditionDTO condition) {
+		StringBuilder sb;
+		if (condition.isPagination()) {
+			sb = new StringBuilder(GET_COUNT_PART);
+		} else {
+			sb = new StringBuilder(GET_TEACHERS_PERFORMANCE_FIELDS_PART);
+		}
+		sb.append(GET_TEACHERS_PERFORMANCE_CONDITION_PART);
+		if (null != condition.getID()) {
+			sb.append("and us.ID=? ");
+		}
 
-	@Override
-	public int getBadPerfCount() {
-		logger.debug("Begin to GET_PERFORMANCE_COUNT");
-		int count = JdbcTemplate.queryForObject(GET_BAD_PERFORMANCE_COUNT, Integer.class,Constant.DEAD_SCORE,Constant.STATUS_EVALUATED);
-		logger.debug("complete to GET_PERFORMANCE_COUNT...");
-		return count;
+		if (!"".equals(condition.getStartCreateTime())&&!"".equals(condition.getEndCreateTime())&&null != condition.getStartCreateTime() && null != condition.getEndCreateTime()) {
+			sb.append("and q.createTime>=? and q.createTime<=? ");
+		}
+
+		if (null != condition.getLowTotalScore() && null != condition.getHighTotalScore()) {
+			sb.append("and (p.attitude+p.profLevel)>=? and (p.attitude+p.profLevel)<=? ");
+		}
+		sb.append("ORDER BY (p.attitude+p.profLevel) ");
+		if (condition.isScoreAsc()) {
+			sb.append("Asc ");
+		} else {
+			sb.append("Desc ");
+		}
+		if (!condition.isPagination()) {
+		sb.append(",q.createTime Desc LIMIT ?,?");
+		}
+		String sqlStatement=sb.toString();
+		return sqlStatement;
 	}
 
 }

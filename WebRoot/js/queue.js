@@ -159,13 +159,19 @@
 				},
 				doQueue: function() {
 					var self = this;
-					var src = "doQueue.action?picNum="+this.picNum
-							+"&path="+this.path+"&comment="+this.comment
-							+"&teacherName="+this.teacherName+"&teacherID="+this.teacherID;
+					var queue={
+							pictureNum:this.picNum,
+							studentPath:this.path,
+							studentComment:this.comment,
+							teacherID:this.teacherID
+					};
+					var src = "doQueue.action";
 					$.ajax({
 						url :src,
-						method : 'GET',
+						method : 'POST',
 						dataType:'json',
+						data:JSON.stringify(queue),
+						contentType:"application/json",
 						success:function(result){
 							if (result.error) {
 								alert("排队失败");

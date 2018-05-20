@@ -9,7 +9,9 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.mqld.annotation.FireAuthority;
@@ -17,6 +19,7 @@ import com.mqld.enums.AuthorityType;
 import com.mqld.enums.ResultType;
 import com.mqld.model.Page;
 import com.mqld.model.QueueItem;
+import com.mqld.model.TeachersPerfQueryConditionDTO;
 import com.mqld.model.User;
 import com.mqld.service.QueueService;
 import com.mqld.util.JsonUtil;
@@ -56,12 +59,12 @@ public class PerformanceController {
 	}
 	
 	@FireAuthority(authorityTypes=AuthorityType.ADMIN, resultType=ResultType.json)
-	@RequestMapping("/getTeachersPerf")				
-	public void getTeachersPerf(HttpServletRequest request,HttpServletResponse response,@RequestParam("currentPage")String currentPage,@RequestParam("pageSize")String pageSize){
+	@RequestMapping(value="/getTeachersPerf" ,method=RequestMethod.POST,consumes = "application/json")				
+	public void getTeachersPerf(HttpServletRequest request,HttpServletResponse response,@RequestParam("currentPage")String currentPage,@RequestParam("pageSize")String pageSize,@RequestBody TeachersPerfQueryConditionDTO condition){
 		int currentPageNum =Integer.parseInt(currentPage);
 		int pageSizeNum=Integer.parseInt(pageSize);
 		Page<QueueItem> page=new Page<QueueItem>(currentPageNum, pageSizeNum);
-		page=queueService.getBadPerf(page);
+		page=queueService.getTeachersPerf(condition,page);
 		if (null==page) {
 			JsonUtil.flushError(response, "·þÎñÆ÷³ö´í");
 		}else {

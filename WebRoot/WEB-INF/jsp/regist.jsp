@@ -70,7 +70,7 @@
 					</field>
 					
 					<field  v-show="type=='助教'" :error="styleError" labelname="风格">
-                                <select id="usertype" name="usertype" class="selectpicker show-tick form-control"  multiple data-live-search="false" >
+                                <select id="teacherStyle" name="teacherStyle" class="selectpicker show-tick form-control"  multiple data-live-search="false" >
                                         <option value="日系设计">日系设计</option>
                                         <option value="韩式写实设计">韩式写实设计</option>
                                         <option value="Q版设计">Q版设计</option>
@@ -89,6 +89,7 @@
 					 <feedback :success="success" :result="result"></feedback> 
 					<button type="button" class="btn btn-primary form-btn"
 						@click="regist" id="regist">注册</button>
+						
 				</form>
 			</div>
 	</div>

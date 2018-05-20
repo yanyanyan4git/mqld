@@ -1,6 +1,9 @@
 package com.mqld.model;
 
+import org.codehaus.jackson.annotate.JsonProperty;
+
 public class User {
+	@JsonProperty("ID")
 	private String ID;
 	private String name;
 	private String gender;

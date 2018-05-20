@@ -6,6 +6,7 @@
 				authorities:['学生','助教','管理员'],
 				ID:'',
 				name:'',
+				psw:'',
 				authority:'---请选择权限--- ',
 				success:false,
 				result:'',
@@ -28,6 +29,7 @@
 						this.ID=item.ID;
 						this.name=item.name;
 						this.authority=item.authority;
+						this.psw='';
 						return item;
 					}
 				  },
@@ -47,7 +49,7 @@
 				},
 				submit: function() {
 					var self = this;
-					var src = "doManagement.action?ID="+this.ID+"&name="+this.name+"&authority="+this.authority;
+					var src = "doManagement.action?ID="+this.ID+"&name="+this.name+"&psw="+this.psw+"&authority="+this.authority;
 					$.ajax({
 						url :src,
 						method : 'GET',

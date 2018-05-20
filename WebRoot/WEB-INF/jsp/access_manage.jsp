@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <title>曼奇利德</title>
 <head>
@@ -67,6 +67,9 @@
 					</field>
 					<field  :error="error" labelname="姓名">
 						<input class="form-control" name="name" v-model="name"></input>
+					</field>
+					<field  :error="error" labelname="密码">
+						<input class="form-control" name="psw" v-model="psw"></input>
 					</field>
 					<field  :error="error" labelname="权限">
 						<selector :selected="authority">

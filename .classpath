@@ -19,11 +19,46 @@
 			<attribute name="owner.project.facets" value="jst.web.jstl"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="D:/java/第三方工具包/servlet-api.jar"/>
-	<classpathentry kind="lib" path="D:/java/tomcat/lib/jsp-api.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jackson-core-lgpl-1.8.1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jackson-mapper-lgpl-1.8.1.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/springmvc"/>
-	<classpathentry kind="lib" path="D:/java/第三方工具包/json.jar"/>
+	<classpathentry kind="lib" path="E:/java/第三方工具包/springMVC-all/antlr-2.7.6.jar"/>
+	<classpathentry kind="lib" path="E:/java/第三方工具包/springMVC-all/com.springsource.com.mchange.v2.c3p0-0.9.1.2.jar"/>
+	<classpathentry kind="lib" path="E:/java/第三方工具包/springMVC-all/com.springsource.javax.servlet.jsp.jstl-1.1.2.jar"/>
+	<classpathentry kind="lib" path="E:/java/第三方工具包/springMVC-all/com.springsource.javax.validation-1.0.0.GA.jar"/>
+	<classpathentry kind="lib" path="E:/java/第三方工具包/springMVC-all/com.springsource.net.sf.cglib-2.2.0.jar"/>
+	<classpathentry kind="lib" path="E:/java/第三方工具包/springMVC-all/com.springsource.org.aopalliance-1.0.0.jar"/>
+	<classpathentry kind="lib" path="E:/java/第三方工具包/springMVC-all/com.springsource.org.apache.commons.logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="E:/java/第三方工具包/springMVC-all/com.springsource.org.apache.taglibs.standard-1.1.2.jar"/>
+	<classpathentry kind="lib" path="E:/java/第三方工具包/springMVC-all/com.springsource.org.aspectj.tools-1.6.6.RELEASE.jar"/>
+	<classpathentry kind="lib" path="E:/java/第三方工具包/springMVC-all/com.springsource.org.aspectj.weaver-1.6.8.RELEASE.jar"/>
+	<classpathentry kind="lib" path="E:/java/第三方工具包/springMVC-all/commons-collections-3.1.jar"/>
+	<classpathentry kind="lib" path="E:/java/第三方工具包/springMVC-all/commons-fileupload-1.2.2.jar"/>
+	<classpathentry kind="lib" path="E:/java/第三方工具包/springMVC-all/commons-io-2.0.1.jar"/>
+	<classpathentry kind="lib" path="E:/java/第三方工具包/springMVC-all/dom4j-1.6.1.jar"/>
+	<classpathentry kind="lib" path="E:/java/第三方工具包/springMVC-all/hibernate3.jar"/>
+	<classpathentry kind="lib" path="E:/java/第三方工具包/springMVC-all/hibernate-validator-4.1.0.Final.jar"/>
+	<classpathentry kind="lib" path="E:/java/第三方工具包/springMVC-all/javassist-3.9.0.GA.jar"/>
+	<classpathentry kind="lib" path="E:/java/第三方工具包/springMVC-all/jta-1.1.jar"/>
+	<classpathentry kind="lib" path="E:/java/第三方工具包/springMVC-all/junit-4.8.2.jar"/>
+	<classpathentry kind="lib" path="E:/java/第三方工具包/springMVC-all/junit-4.9.jar"/>
+	<classpathentry kind="lib" path="E:/java/第三方工具包/springMVC-all/log4j.jar"/>
+	<classpathentry kind="lib" path="E:/java/第三方工具包/springMVC-all/mysql-connector-java-5.0.8-bin.jar"/>
+	<classpathentry kind="lib" path="E:/java/第三方工具包/springMVC-all/slf4j-api-1.5.8.jar"/>
+	<classpathentry kind="lib" path="E:/java/第三方工具包/springMVC-all/slf4j-log4j12.jar"/>
+	<classpathentry kind="lib" path="E:/java/第三方工具包/springMVC-all/spring-aop-3.2.2.jar"/>
+	<classpathentry kind="lib" path="E:/java/第三方工具包/springMVC-all/spring-aspects-3.2.2.jar"/>
+	<classpathentry kind="lib" path="E:/java/第三方工具包/springMVC-all/spring-beans-3.2.2.jar"/>
+	<classpathentry kind="lib" path="E:/java/第三方工具包/springMVC-all/spring-context-3.2.2.jar"/>
+	<classpathentry kind="lib" path="E:/java/第三方工具包/springMVC-all/spring-context-support-3.2.2.jar"/>
+	<classpathentry kind="lib" path="E:/java/第三方工具包/springMVC-all/spring-core-3.2.2.jar"/>
+	<classpathentry kind="lib" path="E:/java/第三方工具包/springMVC-all/spring-expression-3.2.2.jar"/>
+	<classpathentry kind="lib" path="E:/java/第三方工具包/springMVC-all/spring-jdbc-3.2.2.jar"/>
+	<classpathentry kind="lib" path="E:/java/第三方工具包/springMVC-all/spring-orm-3.2.2.jar"/>
+	<classpathentry kind="lib" path="E:/java/第三方工具包/springMVC-all/spring-tx-3.2.2.jar"/>
+	<classpathentry kind="lib" path="E:/java/第三方工具包/springMVC-all/spring-web-3.2.2.jar"/>
+	<classpathentry kind="lib" path="E:/java/第三方工具包/springMVC-all/spring-webmvc-3.2.2.jar"/>
+	<classpathentry kind="lib" path="E:/java/第三方工具包/servlet-api.jar"/>
+	<classpathentry kind="lib" path="E:/java/第三方工具包/json.jar"/>
+	<classpathentry kind="lib" path="E:/java/tomcat/lib/jsp-api.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

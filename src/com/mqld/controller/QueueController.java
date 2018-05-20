@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -50,24 +51,16 @@ public class QueueController {
 	
 	@FireAuthority(authorityTypes=AuthorityType.STUDENT, resultType=ResultType.json)
 	@RequestMapping("/doQueue")				
-	public void doQueue(HttpServletRequest request,HttpServletResponse response,HttpSession session){
+	public void doQueue(HttpServletRequest request,HttpServletResponse response,HttpSession session,@RequestBody QueueItem queueItem){
 		
 		User user=(User) session.getAttribute("user");
-		int picNum=Integer.parseInt(request.getParameter("picNum"));
-		String path=request.getParameter("path");
-		String comment=request.getParameter("comment");
-		String teacherID=request.getParameter("teacherID");
+		String teacherID=queueItem.getTeacherID();
 		boolean flag=queueService.canQueue(teacherID);
 		if (!flag) {
 			JsonUtil.flushError(response, "助教不在工作时间或已排满");
 			return;
 		}
-		QueueItem queueItem=new QueueItem();
 		queueItem.setStudentID(user.getID());
-		queueItem.setTeacherID(teacherID);
-		queueItem.setPictureNum(picNum);
-		queueItem.setStudentPath(path);
-		queueItem.setStudentComment(comment);
 		flag=queueService.queue(queueItem);
 		if (flag) {
 			Map<String, Object> data=new TreeMap<String, Object>();

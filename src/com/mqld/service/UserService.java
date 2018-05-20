@@ -12,7 +12,7 @@ public interface UserService {
 	Page<User> getTeacher( Page<User> page);
 	User getUser(String id);
 	boolean updateTeacher(User user);
-	boolean manageUser(String ID,String name,String authority);
+	boolean manageUser(String ID,String name,String authority, String psw);
 	int delUsers(final List<String> iD);
 	boolean setPassWord(String ID,String psw);
 }

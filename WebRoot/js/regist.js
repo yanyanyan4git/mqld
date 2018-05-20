@@ -35,7 +35,7 @@ var registVm = new Vue({
 		}
 	},
 	mounted:function(){
-		 $('#usertype').selectpicker({
+		 $('#teacherStyle').selectpicker({
 			 noneSelectedText:"请选择助教风格",
 			 actionsBox:true,
 			 deselectAllText:'全不选',
@@ -73,11 +73,33 @@ var registVm = new Vue({
 				return;
 			}
 			var self = this;
-			var serialData=$( "#form").serialize();
-			var src = "doRegist.action?" +serialData+"&userType="+this.type+"&style="+ $('#usertype').val();
+			var teacherStyle=$('#teacherStyle').val();
+			var style=null;
+			if (teacherStyle.length>0) {
+				style="";
+				for (var i = 0; i < teacherStyle.length; i++) {
+					if (i==teacherStyle.length-1) {
+						style+=teacherStyle[i];
+					}else {
+						style+=teacherStyle[i]+",";
+					}
+				}
+			}
+			
+			var user={
+					ID:this.ID,
+					name:this.name,
+					password:this.password,
+					style:style,
+					authority:this.type
+			};
+			var src = "doRegist.action";
 			 $.ajax({
 					url: src,
+					method : 'POST',
 					dataType:"json",
+					data:JSON.stringify(user),
+					contentType:"application/json",
 					success:function(result){
 						data=[];
 						if(result.error){
@@ -88,6 +110,7 @@ var registVm = new Vue({
 							self.successName=registVm.name;
 							self.success=true;
 							self.result=self.ID+"注册成功";
+							$('#teacherStyle').selectpicker('val', []);
 							if (self.fixID) {
 								var num=parseInt(self.ID.substr(1, 6))+1;
 								self.ID=self.ID.charAt(0)+num;
@@ -110,7 +133,7 @@ var registVm = new Vue({
 			var regex=/^[Ss]\d{6}$/;
 			if (this.type=='助教') {
 				regex=/^[Tt]\d{6}$/;
-				if ($('#usertype').val().length==0) {
+				if ($('#teacherStyle').val().length==0) {
 					this.styleError='未选择风格';
 					flag=false;
 				}else {

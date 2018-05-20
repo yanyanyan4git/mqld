@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <title>曼奇立德</title>
 <head>
@@ -63,6 +63,7 @@
 
 					</tbody>
 				</table>
+				<paginbar :data="$data"  v-on:pagin="go"  v-on:inputgo="inputGo"></paginbar>
 			</div>
 
 			<div class="right-div" id="queue"  v-cloak>
@@ -79,17 +80,17 @@
 						</field>
 					<field   labelname="改图水平">
 						 <span class="ratyy right" name="profLevel"></span>
-						 <div><span id="showProfLevel" class="right"></span></div>
+						 <div><span  class="right">{{profLevelShow}}</span></div>
 					</field>
 					<field   labelname="改图态度">
 						 <span class="ratyy right" name="attitude"></span>
-						 <div><span id="showAttitude" class="right"></span></div>
+						 <div><span  class="right">{{attitudeShow}}</span></div>
 					</field>
 					<field   labelname="备注">
 						 <textarea class="form-control" name="comment" v-model="comment"></textarea>
 					</field>
 					<button type="button" class="btn btn-primary form-btn"
-						 @click="evaluate" >提交评价</button>
+						 @click="evaluate" :disabled="!canEvaluate">提交评价</button>
 					<feedback :success="success" :result="result"></feedback>
 				</form>
 				<div class="hidden">{{queue}}</div>

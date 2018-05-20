@@ -57,10 +57,10 @@ public class AccessManageController {
 	}
 	@FireAuthority(authorityTypes=AuthorityType.ADMIN, resultType=ResultType.json)
 	@RequestMapping("/doManagement")				
-	public void doMangement( HttpServletRequest request ,@RequestParam("ID")String ID,@RequestParam("authority")String authority,@RequestParam("name")String name,HttpServletResponse response){
+	public void doMangement( HttpServletRequest request ,@RequestParam("ID")String ID,@RequestParam("authority")String authority,@RequestParam("name")String name,@RequestParam("psw")String psw,HttpServletResponse response){
 		logger.debug(">>doMangement");
 		
-		boolean flag=userService.manageUser(ID, name, authority);
+		boolean flag=userService.manageUser(ID, name, authority,psw);
 		if (flag) {
 			Map<String, Object> data=new TreeMap<String, Object>();
 			data.put("result", flag);

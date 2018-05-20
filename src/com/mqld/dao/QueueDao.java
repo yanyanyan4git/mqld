@@ -3,6 +3,7 @@ package com.mqld.dao;
 import com.mqld.model.Page;
 import com.mqld.model.QueueItem;
 import com.mqld.model.QueueProcess;
+import com.mqld.model.TeachersPerfQueryConditionDTO;
 
 public interface QueueDao {
 
@@ -32,9 +33,8 @@ public interface QueueDao {
 
 	Page<QueueItem> getTeacherPerf(String ID,Page<QueueItem> page);
 
-	Page<QueueItem> getBadPerf(Page<QueueItem> page);
+	Page<QueueItem> getTeachersPerf(TeachersPerfQueryConditionDTO condition, Page<QueueItem> page);
 
 	int getTeacherPerfCount(String ID);
 
-	int getBadPerfCount();
 }
